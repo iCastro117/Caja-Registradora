@@ -49,6 +49,7 @@ public class RegistroProductos {
                     System.out.println("Descuento del 10% aplicado a " + producto.nombre());
                     break;
                 case 2:
+                    System.out.println("No se aplica ningún descuento");
                     // No se aplica ningún descuento
                     break;
                 case 3:
