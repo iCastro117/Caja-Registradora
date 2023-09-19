@@ -3,15 +3,13 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-
-record Producto(String nombre, double precio, int codigo) {
-    public String toString() {
-        return "Producto: " + nombre + "\nPrecio: $" + precio + "\nCodigo: " + codigo;
-    }
-}
- 
-
 public class RegistroProductos {
+    record Producto(String nombre, double precio, int codigo) {
+        public String toString() {
+            return "Producto: " + nombre + "\nPrecio: $" + precio + "\nCodigo: " + codigo;
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<Producto> productos = new ArrayList<>();
@@ -20,7 +18,7 @@ public class RegistroProductos {
         int cantidadProductos = obtenerCodigoNice(scanner);
 
         for (int i = 0; i < cantidadProductos; i++) {
-            scanner.nextLine();  
+            scanner.nextLine();
 
             System.out.println("Producto #" + (i + 1));
             System.out.print("Nombre del producto: ");
@@ -43,7 +41,29 @@ public class RegistroProductos {
             total += producto.precio();
         }
 
+        System.out.println("¿El producto tiene descuento?");
+        System.out.println("(1) si   (2) NO");
+        int opcion = scanner.nextInt();
+
+        switch (opcion) {
+            case 1:
+                // Aquí puedes implementar el código para aplicar el descuento
+                break;
+            case 2:
+                // No se aplica ningún descuento
+                break;
+            default:
+                System.out.println("Opción no válida");
+        }
+
         System.out.println("Total de la compra: $" + total);
+
+        // Solicitar al usuario un monto recibido y calcular el cambio
+        System.out.print("Ingrese la cantidad de dinero recibido: ");
+        double dineroRecibido = obtenerPrecioNice(scanner);
+
+        double cambio = dineroRecibido - total;
+        System.out.println("Cantidad de monto a devolver: $" + cambio);
 
         // Solicitar al usuario un código de producto
         System.out.print("Ingrese un código de producto para obtener información: ");
@@ -55,7 +75,7 @@ public class RegistroProductos {
             if (producto.codigo() == codigoBuscado) {
                 System.out.println("--------------------------------------------");
                 System.out.println("El producto es " + producto.nombre());
-                System.out.println(" El precio es $" + producto.precio());
+                System.out.println("El precio es $" + producto.precio());
                 System.out.println("--------------------------------------------");
                 encontrado = true;
                 break;
@@ -78,7 +98,7 @@ public class RegistroProductos {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Por favor, ingrese un número entero positivo válido.");
-                scanner.nextLine(); 
+                scanner.nextLine();
             }
         }
     }
@@ -94,7 +114,7 @@ public class RegistroProductos {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Por favor, ingrese un número decimal positivo válido.");
-                scanner.nextLine();  
+                scanner.nextLine();
             }
         }
     }
