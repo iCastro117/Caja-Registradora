@@ -42,15 +42,34 @@ public class RegistroProductos {
         }
 
         System.out.println("¿El producto tiene descuento?");
-        System.out.println("(1) si   (2) NO");
+        System.out.println("De ser así se le aplicara un descuento del 10%");
+        System.out.println("(1) Sí   (2) No   (3) Aplicar descuento personalizado");
         int opcion = scanner.nextInt();
 
         switch (opcion) {
             case 1:
-                // Aquí puedes implementar el código para aplicar el descuento
+                // Aplicar un descuento del 10% a todos los productos
+                for (Producto producto : productos) {
+                    double descuento = producto.precio() * 0.10;
+                    producto = new Producto(producto.nombre(), producto.precio() - descuento, producto.codigo());
+                }
                 break;
             case 2:
                 // No se aplica ningún descuento
+                break;
+            case 3:
+                // Solicitar un descuento personalizado y aplicarlo a un producto específico
+                System.out.print("Ingrese el código del producto al que desea aplicar el descuento: ");
+                int codigoProductoDescuento = obtenerCodigoNice(scanner);
+
+                for (Producto producto : productos) {
+                    if (producto.codigo() == codigoProductoDescuento) {
+                        System.out.print("Ingrese el monto del descuento: $");
+                        double descuentoPersonalizado = obtenerPrecioNice(scanner);
+                        producto = new Producto(producto.nombre(), producto.precio() - descuentoPersonalizado, producto.codigo());
+                        break;
+                    }
+                }
                 break;
             default:
                 System.out.println("Opción no válida");
@@ -107,13 +126,13 @@ public class RegistroProductos {
         while (true) {
             try {
                 double numero = scanner.nextDouble();
-                if (numero > 0) {
+                if (numero >= 0) {
                     return numero;
                 } else {
-                    System.out.println("Por favor, ingrese un número decimal positivo.");
+                    System.out.println("Por favor, ingrese un número decimal no negativo.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Por favor, ingrese un número decimal positivo válido.");
+                System.out.println("Por favor, ingrese un número decimal válido.");
                 scanner.nextLine();
             }
         }
