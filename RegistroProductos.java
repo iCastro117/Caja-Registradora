@@ -39,15 +39,14 @@ public class RegistroProductos {
         for (Producto producto : productos) {
             System.out.println(producto + "\n");
 
-            System.out.print("¿El producto tiene descuento?");
-            System.out.println("De ser así se le aplicara un descuento del 10%");
-            System.out.println("(1) Sí   (2) No   (3) Aplicar descuento personalizado");
+            System.out.print("¿El producto " + producto.nombre() + " tiene descuento? (1) Sí   (2) No   (3) Aplicar descuento personalizado: ");
             int opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1:
                     double descuento = producto.precio() * 0.10;
                     producto = new Producto(producto.nombre(), producto.precio() - descuento, producto.codigo());
+                    System.out.println("Descuento del 10% aplicado a " + producto.nombre());
                     break;
                 case 2:
                     // No se aplica ningún descuento
@@ -56,6 +55,7 @@ public class RegistroProductos {
                     System.out.print("Ingrese el monto del descuento: $");
                     double descuentoPersonalizado = obtenerPrecioNice(scanner);
                     producto = new Producto(producto.nombre(), producto.precio() - descuentoPersonalizado, producto.codigo());
+                    System.out.println("Descuento personalizado de $" + descuentoPersonalizado + " aplicado a " + producto.nombre());
                     break;
                 default:
                     System.out.println("Opción no válida");
