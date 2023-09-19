@@ -1,73 +1,73 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
-class Producto {
-    private final String nombre;
-    private final double precio;
-    private final int codigo;
 
-    public Producto(String nombre, double precio, int codigo) {
-        this.nombre = nombre;
-        this.precio = precio;
-        this.codigo = codigo;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    @Override
+record Producto(String nombre, double precio, int codigo) {
     public String toString() {
         return "Producto: " + nombre + "\nPrecio: $" + precio + "\nCodigo: " + codigo;
     }
 }
+ 
 
-public class CajaRegistradora {
+public class RegistroProductos {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Producto> productos = new ArrayList<>();
+        List<Producto> productos = new ArrayList<>();
 
         System.out.print("Ingrese la cantidad de productos: ");
-        int cantidadProductos = obtenerEnteroPositivo(scanner);
+        int cantidadProductos = obtenerCodigoNice(scanner);
 
         for (int i = 0; i < cantidadProductos; i++) {
-            scanner.nextLine(); // Consumir la nueva línea pendiente
+            scanner.nextLine();  
 
-            // Solicitar los detalles de cada producto al usuario
             System.out.println("Producto #" + (i + 1));
             System.out.print("Nombre del producto: ");
             String nombre = scanner.nextLine();
-            double precio = obtenerDoublePositivo(scanner);
-            int codigo = obtenerEnteroPositivo(scanner);
 
-            // Crear un objeto Producto y agregarlo a la lista
-            productos.add(new Producto(nombre, precio, codigo));
+            System.out.print("Precio del producto: ");
+            double precio = obtenerPrecioNice(scanner);
+
+            System.out.print("Codigo del producto: ");
+            int codigo = obtenerCodigoNice(scanner);
+
+            Producto producto = new Producto(nombre, precio, codigo);
+            productos.add(producto);
         }
 
         double total = 0;
         System.out.println("\nRecibo de compra:");
-
-        // Mostrar los detalles de cada producto en el recibo
         for (Producto producto : productos) {
             System.out.println(producto + "\n");
-            total += producto.getPrecio();
+            total += producto.precio();
         }
 
-        // Mostrar el total de la compra
         System.out.println("Total de la compra: $" + total);
+
+        // Solicitar al usuario un código de producto
+        System.out.print("Ingrese un código de producto para obtener información: ");
+        int codigoBuscado = obtenerCodigoNice(scanner);
+
+        // Buscar y mostrar información sobre el producto correspondiente al código ingresado
+        boolean encontrado = false;
+        for (Producto producto : productos) {
+            if (producto.codigo() == codigoBuscado) {
+                System.out.println("--------------------------------------------");
+                System.out.println("El producto es " + producto.nombre());
+                System.out.println(" El precio es $" + producto.precio());
+                System.out.println("--------------------------------------------");
+                encontrado = true;
+                break;
+            }
+        }
+
+        if (!encontrado) {
+            System.out.println("No se encontró un producto con el código " + codigoBuscado);
+        }
     }
 
-    // Función para obtener un entero positivo desde la entrada del usuario
-    private static int obtenerEnteroPositivo(Scanner scanner) {
+    private static int obtenerCodigoNice(Scanner scanner) {
         while (true) {
             try {
                 int numero = scanner.nextInt();
@@ -78,13 +78,12 @@ public class CajaRegistradora {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Por favor, ingrese un número entero positivo válido.");
-                scanner.nextLine(); // Consumir la entrada inválida
+                scanner.nextLine(); 
             }
         }
     }
 
-    // Función para obtener un número decimal positivo desde la entrada del usuario
-    private static double obtenerDoublePositivo(Scanner scanner) {
+    private static double obtenerPrecioNice(Scanner scanner) {
         while (true) {
             try {
                 double numero = scanner.nextDouble();
@@ -95,7 +94,7 @@ public class CajaRegistradora {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Por favor, ingrese un número decimal positivo válido.");
-                scanner.nextLine(); // Consumir la entrada inválida
+                scanner.nextLine();  
             }
         }
     }
